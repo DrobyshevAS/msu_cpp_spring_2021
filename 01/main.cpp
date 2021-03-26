@@ -24,10 +24,10 @@ void reset_test()
 	Allocator mem;
 	mem.makeAllocator(10);
 	char* first = mem.alloc(8);
+	assert(first != nullptr);
 	mem.reset();
 	assert(mem.alloc(10) != nullptr);
 	cout << "reset allocator test: OK" << endl;
-	
 }
 
 void complex_alloc_test()
@@ -43,10 +43,19 @@ void complex_alloc_test()
 	assert(mem.alloc(1) == nullptr);
 
 	mem.reset();
-	
 	assert(mem.alloc(-5) == nullptr);
 
 	cout << "complex alloc test: OK" << endl;
+}
+
+void few_makeAllocator_test()
+{
+	Allocator mem;
+	mem.makeAllocator(10);
+	assert(mem.alloc(10) != nullptr);
+	mem.makeAllocator(10);
+	assert(mem.alloc(10) != nullptr);
+	cout << "few makeAllocator test: OK" << endl;
 }
 
 
@@ -56,4 +65,5 @@ int main()
 	overflow_test();
 	reset_test();
 	complex_alloc_test();
+	few_makeAllocator_test();
 }

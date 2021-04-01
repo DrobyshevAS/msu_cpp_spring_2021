@@ -6,20 +6,20 @@
 
 void test_without_callback()
 {
-	TokenParser test;
-	test.Parse("abc def 123    678    agsj");
+    TokenParser test;
+    test.Parse("abc def 123    678    agsj");
     std::cout << "test_without_callback: Done" << std::endl;
 }
 
 void test_with_emptystring()
 {
     std::stringstream output;
-	TokenParser test;
-	test.SetStartCallback([&output](){output << "Parsing starts: ";});
-	test.SetEndCallback([&output](){output << "Parsing ends.";});
-	test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
-	test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
-	test.Parse("  \t \n \n");
+    TokenParser test;
+    test.SetStartCallback([&output](){output << "Parsing starts: ";});
+    test.SetEndCallback([&output](){output << "Parsing ends.";});
+    test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
+    test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
+    test.Parse("  \t \n \n");
     assert(output.str() == "Parsing starts: Parsing ends.");
     std::cout << "test_with_emptystring: Done" << std::endl;
 }
@@ -27,12 +27,12 @@ void test_with_emptystring()
 void test_with_all()
 {
     std::stringstream output;
-	TokenParser test;
-	test.SetStartCallback([&output](){output << "Parsing starts: ";});
-	test.SetEndCallback([&output](){output << "Parsing ends.";});
-	test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
-	test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
-	test.Parse("abc def 123    678    agsj9s");
+    TokenParser test;
+    test.SetStartCallback([&output](){output << "Parsing starts: ";});
+    test.SetEndCallback([&output](){output << "Parsing ends.";});
+    test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
+    test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
+    test.Parse("abc def 123    678    agsj9s");
     assert(output.str() == "Parsing starts: [S] abc [S] def [D] 123 [D] 678 [S] agsj9s Parsing ends.");
     std::cout << "test_with_all: Done" << std::endl;
 }
@@ -40,11 +40,11 @@ void test_with_all()
 void test_with_only_string_tokens()
 {
     std::stringstream output;
-	TokenParser test;
-	test.SetStartCallback([&output](){output << "Parsing starts: ";});
-	test.SetEndCallback([&output](){output << "Parsing ends.";});
-	test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
-	test.Parse("abc def 123    678    agsj9s");
+    TokenParser test;
+    test.SetStartCallback([&output](){output << "Parsing starts: ";});
+    test.SetEndCallback([&output](){output << "Parsing ends.";});
+    test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
+    test.Parse("abc def 123    678    agsj9s");
     assert(output.str() == "Parsing starts: [S] abc [S] def [S] agsj9s Parsing ends.");
     std::cout << "test_with_only_string_tokens: Done" << std::endl;
 }
@@ -52,11 +52,11 @@ void test_with_only_string_tokens()
 void test_with_only_digit_tokens()
 {
     std::stringstream output;
-	TokenParser test;
-	test.SetStartCallback([&output](){output << "Parsing starts: ";});
-	test.SetEndCallback([&output](){output << "Parsing ends.";});
-	test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
-	test.Parse("abc def 123    678    agsj9s");
+    TokenParser test;
+    test.SetStartCallback([&output](){output << "Parsing starts: ";});
+    test.SetEndCallback([&output](){output << "Parsing ends.";});
+    test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
+    test.Parse("abc def 123    678    agsj9s");
     assert(output.str() == "Parsing starts: [D] 123 [D] 678 Parsing ends.");
     std::cout << "test_with_only_digit_tokens: Done" << std::endl;
 }
@@ -64,11 +64,11 @@ void test_with_only_digit_tokens()
 void test_with_no_start()
 {
     std::stringstream output;
-	TokenParser test;
-	test.SetEndCallback([&output](){output << "Parsing ends.";});
-	test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
-	test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
-	test.Parse("abc def 123    678    agsj9s");
+    TokenParser test;
+    test.SetEndCallback([&output](){output << "Parsing ends.";});
+    test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
+    test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
+    test.Parse("abc def 123    678    agsj9s");
     assert(output.str() == "[S] abc [S] def [D] 123 [D] 678 [S] agsj9s Parsing ends.");
     std::cout << "test_with_no_start: Done" << std::endl;
 }
@@ -76,25 +76,25 @@ void test_with_no_start()
 void test_with_two_same_callbacks()
 {
     std::stringstream output;
-	TokenParser test;
-	test.SetStartCallback([&output](){output << "Parsing starts: ";});
-	test.SetEndCallback([&output](){output << "Parsing ends.";});
-	test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
-	test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
+    TokenParser test;
+    test.SetStartCallback([&output](){output << "Parsing starts: ";});
+    test.SetEndCallback([&output](){output << "Parsing ends.";});
+    test.SetDigitTokenCallback([&output](const uint64_t token){output << "[D] " << token << " ";});
+    test.SetStringTokenCallback([&output](const std::string& token){output << "[S] " << token << " ";});
     test.SetDigitTokenCallback([&output](const uint64_t token){output << "[Digit] " << token << " ";});
-	test.Parse("abc def 123    678    agsj9s");
+    test.Parse("abc def 123    678    agsj9s");
     assert(output.str() == "Parsing starts: [S] abc [S] def [Digit] 123 [Digit] 678 [S] agsj9s Parsing ends.");
     std::cout << "test_with_two_same_callbacks: Done" << std::endl;
 }
 
 int main()
 {
-	test_without_callback();
-	test_with_emptystring();
+    test_without_callback();
+    test_with_emptystring();
     test_with_no_start();
     test_with_only_digit_tokens();
     test_with_only_string_tokens();
-	test_with_all();
+    test_with_all();
     test_with_two_same_callbacks();
-	return 0;
+    return 0;
 }

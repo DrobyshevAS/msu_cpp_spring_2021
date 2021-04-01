@@ -10,8 +10,6 @@ using DigitToken = std::function<void(uint64_t token)>;
 
 class TokenParser
 {
-
-
 public:
     TokenParser() = default;
     void SetStartCallback(const ParseStartFinish& new_StartCallback);

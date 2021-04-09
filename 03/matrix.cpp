@@ -199,7 +199,7 @@ Matrix Matrix::operator+(const Matrix& rsh)
     Matrix res(cols, rows);
     for (size_t i=0; i<rows; i++)
     {
-        res[i]=matrix[i] + rsh[i];
+        res[i]=matrix[i] + rsh.matrix[i];
     }
     return res;
 }

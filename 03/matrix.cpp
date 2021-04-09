@@ -159,7 +159,7 @@ bool Matrix::operator==(const Matrix& rsh)
 
 bool Matrix::operator!=(const Matrix& rsh)
 {
-    return !(matrix == rsh.matrix);
+    return !(*this == rsh);
 }
 
 Matrix& Matrix::operator=(const Matrix& rsh)

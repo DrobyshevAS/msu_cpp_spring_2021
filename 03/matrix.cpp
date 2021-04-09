@@ -74,7 +74,7 @@ bool Matrix::ProxyRow::operator!=(const Matrix::ProxyRow& rsh)
     return !(*this == rsh);
 }
 
-Matrix::ProxyRow Matrix::ProxyRow::operator*=(int num)
+Matrix::ProxyRow Matrix::ProxyRow::operator*=(int32_t num)
 {
     for (size_t i=0; i<cols; i++)
     {
@@ -181,7 +181,7 @@ Matrix& Matrix::operator=(const Matrix& rsh)
     return *this;
 }
 
-Matrix Matrix::operator*=(int num)
+Matrix Matrix::operator*=(int32_t num)
 {
     for (size_t i=0; i<rows; i++)
     {

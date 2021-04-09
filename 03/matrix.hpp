@@ -18,7 +18,7 @@ class Matrix
                 size_t getColumns() const;
                 bool operator==(const ProxyRow& rsh);
                 bool operator!=(const ProxyRow& rsh);
-                ProxyRow operator*=(int num);
+                ProxyRow operator*=(int32_t num);
                 ProxyRow& operator=(const ProxyRow& rsh);
                 ProxyRow operator+(const ProxyRow& rsh);
                 ~ProxyRow();
@@ -30,7 +30,7 @@ class Matrix
         size_t getColumns() const;
         size_t getRows() const;
         Matrix& operator=(const Matrix& rsh);
-        Matrix operator*=(int num);
+        Matrix operator*=(int32_t num);
         Matrix operator+(const Matrix& rsh);
         bool operator==(const Matrix& rsh);
         bool operator!=(const Matrix& rsh);

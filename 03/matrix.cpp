@@ -57,7 +57,7 @@ bool Matrix::ProxyRow::operator==(const Matrix::ProxyRow& rsh)
 {
     if ((cols != rsh.cols))
     {
-        throw std::out_of_range("rows have different dimensions");
+        return false;
     }
     for (size_t i=0; i<cols; i++)
     {
@@ -145,7 +145,7 @@ bool Matrix::operator==(const Matrix& rsh)
 {
     if ((cols != rsh.cols) || (rows != rsh.rows))
     {
-        throw std::out_of_range("matrices have different dimensions");
+        return false;
     }
     for (size_t i=0; i<rows; i++)
     {

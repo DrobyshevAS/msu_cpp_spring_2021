@@ -214,7 +214,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix::ProxyRow& row)
     auto cols = row.getColumns(); 
     for (size_t i=0; i<cols; i++)
     {
-        out << row[i] << ' ';
+        out << row.row[i] << ' ';
     }
     return out;
 }
@@ -224,7 +224,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix& matrix)
     auto rows = matrix.getRows();
     for (size_t i=0; i<rows; i++)
     {
-        out << matrix[i] << std::endl;
+        out << matrix.matrix[i] << std::endl;
     }
     return out;
 }

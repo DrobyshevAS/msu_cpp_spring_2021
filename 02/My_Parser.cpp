@@ -43,7 +43,14 @@ void TokenParser::Parse(const std::string& text)
 		}
 		if (flag == 1)
 		{
-			DigitTokenCallback(stoi(token));
+			try 
+			{
+				DigitTokenCallback(stoull(token));
+			}
+			catch (std::out_of_range &) 
+			{
+				StringTokenCallback(token);
+			}
 		}
 	}
 	EndCallback();

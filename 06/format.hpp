@@ -1,7 +1,10 @@
+#pragma once
+
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
+#include "exceptions.hpp"
 
 template <class T>
 void make_list_of_args(std::ostream& res, int count1, int count2, const T& arg);

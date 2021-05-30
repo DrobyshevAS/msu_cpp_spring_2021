@@ -1,3 +1,5 @@
+#pragma once
+
 template <class T>
 void make_list_of_args(std::ostream& res, int count1, int count2, const T& arg)
 {
@@ -7,7 +9,7 @@ void make_list_of_args(std::ostream& res, int count1, int count2, const T& arg)
     }
     else
     {
-        throw std::runtime_error("Too few arguments");
+        throw NotEnoughArgumentsError("Too few arguments");
     }   
 }
 
@@ -24,8 +26,22 @@ void make_list_of_args(std::ostream& res, int count1, int count2, const T& arg, 
     }  
 }
 
+template <class T>
+void check_number_of_args(int count, int max, const T& arg)
+{
+    if (count > max)
+        throw TooManyArgumentsError("Too many arguments");   
+}
+
+template <class T, class... ArgsT>
+void check_number_of_args(int count, int max, const T& arg, const ArgsT&... args)
+{
+    check_number_of_args(count + 1, max, args...);
+}
+
+
 template <class... ArgsT>
-std::string format(std::string str, const ArgsT&... args)
+std::string format(std::string str)
 {
     std::ostringstream res;
     std::string buff = "";
@@ -36,22 +52,28 @@ std::string format(std::string str, const ArgsT&... args)
         {
             if (str[i] == '{')
             {
-                throw std::runtime_error("Two consecutive parentheses {");
+                throw BracketError("Two consecutive parentheses {");
             }
             if (str[i] == '}')
             {
                 if (buff == "")
                 {
-                    throw std::runtime_error("No data between brackets{}");
+                    throw IncorrectDataBetweenBrackets("No data between brackets{}");
                 }
-                make_list_of_args(res, 0, stoul(buff), args...);
-                buff = "";
-                flag = 0;
-                continue;
+                try
+                {
+                    if (stoul(buff) >= 0)
+                        throw NotEnoughArgumentsError("Too few arguments");
+                }
+                catch (std::out_of_range &)
+                {
+                    throw IncorrectDataBetweenBrackets("Too big number in brackets");
+                }
+                
             }
             if (isdigit(str[i]) == 0)
             {
-                throw std::runtime_error("Incorrect data between brackets{}");
+                throw IncorrectDataBetweenBrackets("Incorrect data between brackets{}");
             }
             buff += str[i];
             continue;
@@ -60,7 +82,7 @@ std::string format(std::string str, const ArgsT&... args)
         {
             if  (str[i] == '}')
             {
-                throw std::runtime_error("} bracket without { bracket");
+                throw BracketError("} bracket without { bracket");
             }
             if (str[i] == '{')
             {
@@ -73,5 +95,69 @@ std::string format(std::string str, const ArgsT&... args)
 
         }
     }
+    return res.str();
+}
+
+template <class... ArgsT>
+std::string format(std::string str, const ArgsT&... args)
+{
+    std::ostringstream res;
+    std::string buff = "";
+    int flag = 0;
+    uint64_t max = 0;
+    for (size_t i=0; i<str.length(); i++)
+    {
+        if (flag == 1)
+        {
+            if (str[i] == '{')
+            {
+                throw BracketError("Two consecutive parentheses {");
+            }
+            if (str[i] == '}')
+            {
+                if (buff == "")
+                {
+                    throw IncorrectDataBetweenBrackets("No data between brackets{}");
+                }
+                try
+                {
+                    if (stoul(buff) > max)
+                        max = stoul(buff);
+                    make_list_of_args(res, 0, stoul(buff), args...);
+                    buff = "";
+                    flag = 0;
+                    continue;
+                }
+                catch (std::out_of_range &)
+                {
+                    throw IncorrectDataBetweenBrackets("Too big number in brackets");
+                }
+                
+            }
+            if (isdigit(str[i]) == 0)
+            {
+                throw IncorrectDataBetweenBrackets("Incorrect data between brackets{}");
+            }
+            buff += str[i];
+            continue;
+        }
+        else
+        {
+            if  (str[i] == '}')
+            {
+                throw BracketError("} bracket without { bracket");
+            }
+            if (str[i] == '{')
+            {
+                flag = 1;
+            }
+            else 
+            {
+                res << str[i];
+            }
+
+        }
+    }
+    check_number_of_args(0, max,  args...);
     return res.str();
 }

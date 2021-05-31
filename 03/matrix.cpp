@@ -12,20 +12,20 @@ Matrix::ProxyRow::ProxyRow (size_t cols_)
     }
 }
 
-int& Matrix::ProxyRow::operator[](size_t i)
+int32_t& Matrix::ProxyRow::operator[](size_t i)
 {
     if (i >= cols)
     {
-            throw std::out_of_range("column index out of range");
+        throw std::out_of_range("column index out of range");
     }
     return row[i];
 }
 
-const int& Matrix::ProxyRow::operator[](size_t i) const
+const int32_t& Matrix::ProxyRow::operator[](size_t i) const
 {
     if (i >= cols)
     {
-            throw std::out_of_range("column index out of range");
+        throw std::out_of_range("column index out of range");
     }
     return row[i];
 }
@@ -37,7 +37,7 @@ size_t Matrix::ProxyRow::getColumns() const
 
 Matrix::ProxyRow& Matrix::ProxyRow::operator=(const Matrix::ProxyRow& rsh)
 {
-    if (row != rsh.row)
+    if (this != &rsh)
     {
         if (row != nullptr)
         {
@@ -53,11 +53,11 @@ Matrix::ProxyRow& Matrix::ProxyRow::operator=(const Matrix::ProxyRow& rsh)
     return *this;
 }
 
-bool Matrix::ProxyRow::operator==(const Matrix::ProxyRow& rsh)
+bool Matrix::ProxyRow::operator==(const Matrix::ProxyRow& rsh) const
 {
     if ((cols != rsh.cols))
     {
-        return false;
+        throw std::out_of_range("rows have different dimensions");
     }
     for (size_t i=0; i<cols; i++)
     {
@@ -69,12 +69,12 @@ bool Matrix::ProxyRow::operator==(const Matrix::ProxyRow& rsh)
     return true;
 }
 
-bool Matrix::ProxyRow::operator!=(const Matrix::ProxyRow& rsh)
+bool Matrix::ProxyRow::operator!=(const Matrix::ProxyRow& rsh) const
 {
     return !(*this == rsh);
 }
 
-Matrix::ProxyRow Matrix::ProxyRow::operator*=(int32_t num)
+Matrix::ProxyRow& Matrix::ProxyRow::operator*=(int32_t num)
 {
     for (size_t i=0; i<cols; i++)
     {
@@ -83,7 +83,7 @@ Matrix::ProxyRow Matrix::ProxyRow::operator*=(int32_t num)
     return *this;
 }
 
-Matrix::ProxyRow Matrix::ProxyRow::operator+(const Matrix::ProxyRow& rsh)
+Matrix::ProxyRow Matrix::ProxyRow::operator+(const Matrix::ProxyRow& rsh) const
 {
     if ((cols != rsh.cols))
     {
@@ -97,10 +97,6 @@ Matrix::ProxyRow Matrix::ProxyRow::operator+(const Matrix::ProxyRow& rsh)
     return res;
 }
 
-Matrix::ProxyRow::~ProxyRow()
-{
-    delete[] row;
-}
 
 Matrix::Matrix(size_t cols_, size_t rows_)
 {
@@ -126,7 +122,7 @@ const Matrix::ProxyRow& Matrix::operator[](size_t i) const
 {
     if (i >= rows)
     {
-            throw std::out_of_range("row index out of range");
+        throw std::out_of_range("row index out of range");
     }
     return matrix[i];
 }
@@ -141,11 +137,11 @@ size_t Matrix::getRows() const
     return rows;
 }
 
-bool Matrix::operator==(const Matrix& rsh)
+bool Matrix::operator==(const Matrix& rsh) const
 {
     if ((cols != rsh.cols) || (rows != rsh.rows))
     {
-        return false;
+        throw std::out_of_range("matrices have different dimensions");
     }
     for (size_t i=0; i<rows; i++)
     {
@@ -157,9 +153,9 @@ bool Matrix::operator==(const Matrix& rsh)
     return true;
 }
 
-bool Matrix::operator!=(const Matrix& rsh)
+bool Matrix::operator!=(const Matrix& rsh) const
 {
-    return !(*this == rsh);
+    return !(matrix == rsh.matrix);
 }
 
 Matrix& Matrix::operator=(const Matrix& rsh)
@@ -181,7 +177,7 @@ Matrix& Matrix::operator=(const Matrix& rsh)
     return *this;
 }
 
-Matrix Matrix::operator*=(int32_t num)
+Matrix& Matrix::operator*=(int32_t num)
 {
     for (size_t i=0; i<rows; i++)
     {
@@ -190,7 +186,7 @@ Matrix Matrix::operator*=(int32_t num)
     return *this;
 }
 
-Matrix Matrix::operator+(const Matrix& rsh)
+Matrix Matrix::operator+(const Matrix& rsh) const
 {
     if ((cols != rsh.cols) || (rows != rsh.rows))
     {
@@ -199,15 +195,21 @@ Matrix Matrix::operator+(const Matrix& rsh)
     Matrix res(cols, rows);
     for (size_t i=0; i<rows; i++)
     {
-        res[i]=matrix[i] + rsh[i];
+        res.matrix[i]=matrix[i] + rsh.matrix[i];
     }
     return res;
 }
 
+
 Matrix::~Matrix()
-{
+{   
+    for (size_t i = 0; i < rows; i++) 
+    {
+        matrix[i].~ProxyRow();
+    }
     delete[] matrix;
 }
+
 
 std::ostream& operator<<(std::ostream& out, const Matrix::ProxyRow& row)
 {

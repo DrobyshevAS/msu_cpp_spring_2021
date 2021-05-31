@@ -64,7 +64,7 @@ class Iterator
             }
         }
 
-        void operator--()
+        Iterator& operator--()
         {
             if (reversed == false)
             {
@@ -74,9 +74,25 @@ class Iterator
             {
                 iter++;
             }  
+            return *this;
         }
 
-        void operator++()
+        
+        Iterator operator--(int)
+        {
+            auto temp = iter;
+            if (reversed == false)
+            {
+                temp--;
+            }
+            else
+            {
+                temp++;
+            }
+            return Iterator(temp, reversed);
+        }
+
+        Iterator& operator++()
         {
             if (reversed == false)
             {
@@ -86,7 +102,24 @@ class Iterator
             {
                 iter--;
             }
+            return *this;
         }
+
+        
+        Iterator operator++(int)
+        {
+            auto temp = iter;
+            if (reversed == false)
+            {
+                temp++;
+            }
+            else
+            {
+                temp--;
+            }
+            return Iterator(temp, reversed);
+        }
+        
 
         int operator*() const
         {

@@ -57,7 +57,8 @@ class vector {
                 {
                     new_data[i] = data[i];
                 }
-                alloc.deallocate(data);
+                if (data != nullptr)
+                    alloc.deallocate(data);
                 data = new_data;
                 capacity_ = new_capacity;
             }
@@ -87,7 +88,8 @@ class vector {
             {
                 (data+i)->~T();
             }
-            size_=0;
+            data = nullptr;
+            size_= capacity_=0;
         }
 
         Iterator<T> begin()
@@ -117,9 +119,9 @@ class vector {
 
         void resize(size_t new_size)
         {
-            if (new_size>capacity_)
+            if (new_size>=capacity_)
             {
-                reserve(2*(capacity_ + 1) - 1);
+                reserve(2*(new_size + 1) - 1);
             }
             for (size_t i = size_; i<new_size; i++)
             {
@@ -130,20 +132,21 @@ class vector {
 
         void resize(size_t new_size, const T&  value)
         {
-            if (new_size>capacity_)
+            if (new_size>=capacity_)
             {
-                reserve(2*(capacity_ + 1) - 1);
+                reserve(2*(new_size + 1) - 1);
             }
             for (size_t i = size_; i<new_size; i++)
             {
                 data[i] = value;
             }
+            
             size_=new_size;
         }
 
     private:
         T* data;
         Alloc alloc;
-        size_t size_;
-        size_t capacity_;
+        size_t size_ = 0;
+        size_t capacity_ = 0;
 };

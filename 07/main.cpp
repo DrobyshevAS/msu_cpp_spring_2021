@@ -15,7 +15,6 @@ void test_size_capacity()
     assert(num.size() == 5);
     assert(num.capacity() == 7);
     std::cout << "Test size/capacity: Done"<< std::endl;
-    //num.clear();
 }
 
 void test_brackets()
@@ -41,7 +40,6 @@ void test_brackets()
         assert(e.what() == std::string ("Index out of range"));
     }
     std::cout << "Test brackets: Done"<< std::endl;
-    //num.clear();
 }
 
 void test_resize_without_value()
@@ -54,7 +52,6 @@ void test_resize_without_value()
         assert(num[i] == 0);
     }
     std::cout << "Test resize without value: Done"<< std::endl;
-    //num.clear();
 }
 
 void test_resize_with_value()
@@ -68,7 +65,6 @@ void test_resize_with_value()
         assert(num[i] == 5);
     }
     std::cout << "Test resize with value: Done"<< std::endl;
-    //num.clear();
 }
 
 void test_begin_end()
@@ -88,7 +84,6 @@ void test_begin_end()
         i++;
     }
     std::cout << "Test begin/end: Done"<< std::endl;
-    //num.clear();
 }
 
 
@@ -109,7 +104,6 @@ void test_reversed_begin_end()
         i--;
     }
     std::cout << "Test reversed begin/end: Done"<< std::endl;
-    //num.clear();
 }
 
 

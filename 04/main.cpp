@@ -1,124 +1,82 @@
 #include <cassert>
-#include <string.h>
 #include <iostream>
 #include <sstream>
-#include "serializer.hpp"
 
+#include "BigInt.hpp"
 
-struct CorrectData
+void ostream_test()
 {
-    uint64_t a;
-    bool b;
-    uint64_t c;
+    std::ostringstream output;
+    BigInt a("-18446744073709551617");
+    output << a;
+    assert(output.str() == std::string("-18446744073709551617"));
+    std::cout << "ostream test: Done" << std::endl;
+}
 
-    template <class Serializer>
-    Error serialize(Serializer& serializer)
-    {
-        return serializer(a, b, c);
-    }
-
-    template <class Deserializer>
-    Error deserialize(Deserializer& deserializer)
-    {
-        return deserializer(a, b, c);
-    }
-};
-
-struct UncorrectData1
+void plus_operator_test()
 {
-    uint64_t a;
-    bool b;
-    std::string c;
+    std::ostringstream output;
+    BigInt x("18446744073709551617");
+    BigInt y("18446744073709551617");
+    BigInt z("-18446744073709551617");
+    output << x + y << " " << x + z << " " << x + 12;
+    assert(output.str() == std::string("36893488147419103234 0 18446744073709551629"));
+    std::cout << "operator + test: Done" << std::endl;
+}
 
-    template <class Serializer>
-    Error serialize(Serializer& serializer)
-    {
-        return serializer(a, b, c);
-    }
-
-    template <class Deserializer>
-    Error deserialize(Deserializer& deserializer)
-    {
-        return deserializer(a, b, c);
-    }
-};
-
-struct UncorrectData2
+void minus_operator_test()
 {
-    uint64_t a;
-    std::string b;
-    uint64_t c;
+    std::ostringstream output;
+    BigInt x("18446744073709551617");
+    BigInt y("18446744073709551617");
+    BigInt z("-18446744073709551617");
+    BigInt q(12);
+    output << x - y << " " << x - z << " " << x - q << " " << -x;
+    assert(output.str() == std::string("0 36893488147419103234 18446744073709551605 -18446744073709551617"));
+    std::cout << "operator - test: Done" << std::endl;
+}
 
-    template <class Serializer>
-    Error serialize(Serializer& serializer)
-    {
-        return serializer(a, b, c);
-    }
-
-    template <class Deserializer>
-    Error deserialize(Deserializer& deserializer)
-    {
-        return deserializer(a, b, c);
-    }
-};
-
-void test1()
+void multiplication_operator_test()
 {
-    CorrectData x { 1, true, 2 };
+    std::ostringstream output;
+    BigInt x("18446744073709551617");
+    BigInt y("18446744073709551617");
+    BigInt z("-18446744073709551617");
+    BigInt q = 0;
+    output << x * y << " " << x * z << " " << x * q << " " << z * q;
+    assert(output.str() == std::string("340282366920938463500268095579187314689 -340282366920938463500268095579187314689 0 0"));
+    std::cout << "operator * test: Done" << std::endl;
+}
 
-    std::stringstream stream;
-
-    Serializer serializer(stream);
-    serializer.save(x);
-
-    CorrectData y { 0, false, 0 };
-
-    Deserializer deserializer(stream);
-    const Error err = deserializer.load(y);
-
-    assert(err == Error::NoError);
-
-    assert(x.a == y.a);
-    assert(x.b == y.b);
-    assert(x.c == y.c);
-
-    std::cout << "Test 1: Done." << std::endl;
-};
-
-void test2()
+void equal_not_equal_test()
 {
-    UncorrectData1 x { 1, true, "name"};
+    std::ostringstream output;
+    BigInt x("18446744073709551617");
+    BigInt y("10");
+    BigInt z("18446744073709551617");
+    assert((x != y) && (x == z));
+    std::cout << "equal/not_equal operator test: Done" << std::endl;
+}
 
-    std::stringstream stream;
-
-    Serializer serializer(stream);
-    assert(serializer.save(x) == Error::CorruptedArchive);
-
-    std::cout << "Test 2: Done." << std::endl;
-};
-
-void test3()
+void more_less_test()
 {
-    CorrectData x { 1, true, 2};
-
-    std::stringstream stream;
-
-    Serializer serializer(stream);
-    assert(serializer.save(x) == Error::NoError);
-
-    UncorrectData2 y { 1, "name", 2};
-
-    Deserializer deserializer(stream);
-    assert(deserializer.load(y) == Error::CorruptedArchive);
-
-    std::cout << "Test 3: Done." << std::endl;
-};
+    std::ostringstream output;
+    BigInt x("18446744073709551617");
+    BigInt y("10");
+    BigInt z("-18446744073709551617");
+    BigInt q("18446744073709551617");
+    BigInt r("-10");
+    assert((x > y) && (z < q) && (x >= q) && (x > z) && (z < x) && (q <= x) && (y < x));
+    std::cout << "more/less operators test: Done" << std::endl;
+}
 
 int main()
 {
-    test1();
-    test2();
-    test3();
+    ostream_test();
+    plus_operator_test();
+    minus_operator_test();
+    multiplication_operator_test();
+    equal_not_equal_test();
+    more_less_test();
     return 0;
 }
-
